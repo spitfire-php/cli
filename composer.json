@@ -1,0 +1,15 @@
+{
+    "name": "spitfire/cli",
+    "description": "CLI Components for Spitfire",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "César de la Cal Bretschneider",
+            "email": "cesar@magic3w.com"
+        }
+    ],
+    "require": {
+        "spitfire/collection": "dev-master"
+    }
+}
