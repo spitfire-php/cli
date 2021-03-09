@@ -10,6 +10,7 @@
         }
     ],
     "require": {
-        "spitfire/collection": "dev-master"
+		"ext-posix" : "*",
+        "spitfire/collection": "0.1"
     }
 }
