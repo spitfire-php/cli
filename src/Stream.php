@@ -27,9 +27,17 @@
 class Stream
 {
 	
+	/**
+	 * 
+	 * @var resource
+	 */
 	private $stream;
 	
-	public function __construct($stream = STDOUT) {
+	/**
+	 * @param resource $stream
+	 */
+	public function __construct($stream = STDOUT) 
+	{
 		$this->stream = $stream;
 	}
 	
@@ -43,19 +51,41 @@ class Stream
 		return $this;
 	}
 	
-	public function down($lines = 1) {
+	/**
+	 * 
+	 * @param int $lines
+	 * @return Stream
+	 */
+	public function down(int $lines = 1) : Stream
+	{
 		return $this->out("\e[${lines}B");
 	}
 	
-	public function up($lines = 1) {
+	/**
+	 * 
+	 * @param int $lines
+	 * @return Stream
+	 */
+	public function up(int $lines = 1) : Stream
+	{
 		return $this->out("\e[${lines}A");
 	}
 	
-	public function rewind() {
+	/**
+	 * 
+	 * @return Stream
+	 */
+	public function rewind() : Stream
+	{
 		return $this->out("\r" . exec('tput el'));
 	}
 	
-	public function line() {
+	/**
+	 * 
+	 * @return Stream
+	 */
+	public function line() : Stream
+	{
 		return $this->out(PHP_EOL);
 	}
 	
@@ -75,7 +105,8 @@ class Stream
 	 * 
 	 * @return bool
 	 */
-	public function isInteractive() {
+	public function isInteractive() : bool
+	{
 		return function_exists('posix_isatty') && posix_isatty($this->stream);
 	}
 }

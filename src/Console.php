@@ -27,22 +27,52 @@
 class Console
 {
 	
+	/**
+	 * The STDOUT stream.
+	 * 
+	 * @var Stream
+	 */
 	private $stdout;
+	
+	/**
+	 * The STDERR stream. 
+	 * 
+	 * @var Stream
+	 */
 	private $stderr;
 	
+	/**
+	 * @var CLIColor
+	 */
 	private $colors;
 	
-	private $current = null;
+	/**
+	 * The currently active stream.
+	 * 
+	 * @var Stream
+	 */
+	private $current;
 	
-	public function __construct() {
-		$this->stdout = new Stream(STDOUT);
+	/**
+	 * Instances a new console interface. This allows the application to output data to the command
+	 * line, providing utils for printing labels and progress indicators.
+	 */
+	public function __construct() 
+	{
+		$this->stdout = $this->current = new Stream(STDOUT);
 		$this->stderr = new Stream(STDERR);
 		
 		$this->colors = new CLIColor();
 	}
 	
-	public function error($msg) {
-		$this->current = $this->stdout;
+	/**
+	 * 
+	 * @param string $msg The message to print.
+	 * @return Console
+	 */
+	public function error(string $msg) : Console
+	{
+		$this->current = $this->stderr;
 		$out = str_replace(PHP_EOL, PHP_EOL . '       ', trim($msg));
 		
 		$this->current
@@ -56,6 +86,13 @@ class Console
 		return $this;
 	}
 	
+	
+	/**
+	 * Prints a message labeled as information
+	 * 
+	 * @param string $msg The message to print.
+	 * @return Console
+	 */
 	public function info($msg) {
 		$this->current = $this->stdout;
 		$out = str_replace(PHP_EOL, PHP_EOL . '       ', trim($msg));
@@ -71,6 +108,12 @@ class Console
 		return $this;
 	}
 	
+	/**
+	 * Prints a success message.
+	 * 
+	 * @param string $msg The message to print.
+	 * @return Console
+	 */
 	public function success($msg) {
 		$this->current = $this->stdout;
 		$out = str_replace(PHP_EOL, PHP_EOL . '       ', trim($msg));
@@ -86,35 +129,71 @@ class Console
 		return $this;
 	}
 	
-	public function progress($msg) {
-		return $this->current = new ProgressBar($msg);
+	
+	/**
+	 * 
+	 * @param string $msg The message to print.
+	 * @return ProgressBar
+	 */
+	public function progress($msg) 
+	{
+		return new ProgressBar($msg);
 	}
 	
+	/**
+	 * 
+	 * @return Stream
+	 */
 	public function stdout() {
 		return $this->stdout;
 	}
 	
+	/**
+	 * 
+	 * @return Stream
+	 */
 	public function stderr() {
 		return $this->stderr;
 	}
 	
+	/**
+	 * 
+	 * @return Console
+	 */
 	public function rewind() {
-		$this->current && $this->current->rewind();
+		$this->current->rewind();
 		return $this;
 	}
 	
-	public function up($lines = 1) {
-		$this->current && $this->current->up($lines);
+	/**
+	 * 
+	 * @param int $lines
+	 * @return Console
+	 */
+	public function up($lines = 1) 
+	{
+		$this->current->up($lines);
 		return $this;
 	}
 	
-	public function down($lines = 1) {
-		$this->current && $this->current->down($lines);
+	/**
+	 * 
+	 * @param int $lines
+	 * @return Console
+	 */
+	public function down(int $lines = 1) 
+	{
+		$this->current->down($lines);
 		return $this;
 	}
 	
-	public function ln() {
-		$this->current && $this->current->line();
+	/**
+	 * 
+	 * @return Console
+	 */
+	public function ln() 
+	{
+		$this->current->line();
 		return $this;
 	}
 	

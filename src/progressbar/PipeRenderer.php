@@ -39,6 +39,7 @@ class PipeRenderer
 {
 
 	/**
+	 * 
 	 * @var Stream
 	 */
 	private $stream;
@@ -51,31 +52,51 @@ class PipeRenderer
 	 */
 	private $message;
 	
+	/**
+	 * 
+	 * @var bool
+	 */
 	private $renderedMessage = false;
-	private $progress = 0;
 	
-	public function __construct ($message, $stream)
+	/**
+	 * 
+	 * @var int
+	 */
+	private $cached = 0;
+	
+	
+	public function __construct (string $message, Stream $stream)
 	{
 		$this->message = $message;
 		$this->stream = $stream;
 	}
 	
-	public function render($progress) {
+	public function render(float $progress) : void
+	{
 		
 		$percent = (int)($progress * 100);
-		if ($percent <= $this->progress) { return; }
 		
-		if (!$this->renderedMessage) {
-		$this->stream->out(sprintf('[WAIT] %s ', $this->message));
-		$this->renderedMessage = true;
+		/**
+		 * Pipes are not a buffer. So they 
+		 */
+		if ($percent <= $this->cached) 
+		{ 
+			return; 
 		}
 		
-		if ($progress < 0 || $progress > 1) {
-		#Do nothing. This cannot be rendered.
+		if (!$this->renderedMessage) 
+		{
+			$this->stream->out(sprintf('[WAIT] %s ', $this->message));
+			$this->renderedMessage = true;
+		}
+		
+		if ($progress < 0 || $progress > 1) 
+		{
+			#Do nothing. This cannot be rendered.
 		}
 		else {
-		$this->stream->out(str_repeat('.', $percent - $this->progress));
-		$this->progress = $percent;
+			$this->stream->out(str_repeat('.', $percent - $this->cached));
+			$this->cached = $percent;
 		}
 	}
 }

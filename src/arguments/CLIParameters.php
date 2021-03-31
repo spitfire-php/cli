@@ -29,13 +29,23 @@ use Exception;
 class CLIParameters
 {
 	
+	/**
+	 * 
+	 * @var array<string,string>
+	 */
 	private $params;
 	
-	public function __construct($params) {
+	/**
+	 * 
+	 * @param array<string,string> $params
+	 */
+	public function __construct(array $params) 
+	{
 		$this->params = $params;
 	}
 	
-	public function redirect($from, $to) {
+	public function redirect(string $from, string $to) : void
+	{
 		
 		if (isset($this->params[$from]) && !isset($this->params[$to])) {
 			$this->params[$to] = $this->params[$from];
@@ -46,11 +56,14 @@ class CLIParameters
 		}
 	}
 	
-	public function get($name) {
-		return isset($this->params[$name])? $this->params[$name] : false;
+	public function get(string $name) :? string
+	{
+		return isset($this->params[$name])? $this->params[$name] : null;
 	}
 	
-	public function defined($name) {
+	
+	public function defined(string $name) : bool
+	{
 		return array_key_exists($name, $this->params);
 	}
 	

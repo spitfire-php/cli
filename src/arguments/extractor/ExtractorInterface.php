@@ -34,6 +34,6 @@ interface ExtractorInterface
 	 *                             to indicate this extractor could not process the
 	 *                             data and a string if the argument is a argument.
 	 */
-	public function extract($argument);
+	public function extract(string $argument);
 	
 }

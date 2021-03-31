@@ -40,8 +40,13 @@ class CLIColor
 	
 	const RESET = '0';
 	
-	
-	public function color($color) {
+	/**
+	 * 
+	 * @param string $color
+	 * @return string
+	 */
+	public function color(string $color) : string 
+	{
 		return "\033[{$color}m";
 	}
 }

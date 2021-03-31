@@ -28,20 +28,41 @@ use spitfire\collection\Collection;
 
 class CLIArguments
 {
-	
+	/**
+	 * 
+	 * @var string
+	 */
 	private $script;
 	
+	/**
+	 * 
+	 * @var Collection<string>
+	 */
 	private $arguments;
 	
+	/**
+	 * 
+	 * @var CLIParameters
+	 */
 	private $parameters;
 	
-	public function __construct($script, $arguments, $parameters) {
+	/**
+	 * 
+	 * @param string $script
+	 * @param string[] $arguments
+	 * @param string[] $parameters
+	 */
+	public function __construct(string $script, array $arguments, array $parameters) {
 		$this->script = $script;
 		$this->arguments = new Collection($arguments);
 		$this->parameters = new CLIParameters($parameters);
 	}
 	
-	public function script() {
+	/**
+	 * 
+	 */
+	public function script() : string
+	{
 		return $this->script;
 	}
 	
@@ -49,11 +70,13 @@ class CLIArguments
 	 * 
 	 * @return Collection
 	 */
-	public function arguments() {
+	public function arguments() : Collection
+	{
 		return $this->arguments;
 	}
 
-	public function parameters() {
+	public function parameters() : CLIParameters 
+	{
 		return $this->parameters;
 	}
 }

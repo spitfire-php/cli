@@ -54,7 +54,7 @@ class InteractiveRenderer
 	 */
 	private $lastredraw;
 	
-	public function __construct ($message, $stream)
+	public function __construct (string $message, Stream $stream)
 	{
 		$this->message = $message;
 		$this->stream = $stream;
@@ -63,9 +63,10 @@ class InteractiveRenderer
 	/**
 	 * Generates output that is sent to the stream.
 	 * 
-	 * @param int $progress A percent value between 0 and 1
+	 * @param float $progress A percent value between 0 and 1
 	 */
-	public function render($progress) {
+	public function render(float $progress) : void
+	{
 			
 		if (time() === $this->lastredraw) { return; }
 
@@ -76,7 +77,7 @@ class InteractiveRenderer
 			$this->stream->out(sprintf('[WAIT] %s [%s]', $this->message, 'Invalid value ' . $progress));
 		}
 		else {
-			$width = exec('tput cols') - strlen($this->message) - 10;
+			$width = (int)exec('tput cols') - strlen($this->message) - 10;
 			$drawn = (int)($progress * $width);
 			$this->stream->out(sprintf('[WAIT] %s [%s%s]', $this->message, str_repeat('#', $drawn), str_repeat(' ', $width - $drawn)));
 		}

@@ -1,5 +1,6 @@
 <?php namespace spitfire\cli\arguments;
 
+use spitfire\cli\arguments\extractor\ExtractorInterface;
 use spitfire\cli\arguments\extractor\LongParamExtractor;
 use spitfire\cli\arguments\extractor\ShortParamExtractor;
 use spitfire\cli\arguments\extractor\STDINExtractor;
@@ -32,6 +33,10 @@ use spitfire\cli\arguments\extractor\StopCommandExtractor;
 class Parser
 {
 	
+	/**
+	 * 
+	 * @var ExtractorInterface[]
+	 */
 	private $extractors;
 	
 	public function __construct() {

@@ -27,12 +27,20 @@
 class StopCommandExtractor implements ExtractorInterface
 {
 	
+	/**
+	 * @var bool
+	 */
 	private $switch = false;
 	
-	public function extract($argument) {
+	/**
+	 * 
+	 * @return mixed[]|bool|string
+	 */
+	public function extract(string $argument) 
+	{
 		if ($argument === '--') { 
 			$this->switch = true; 
-			return null;
+			return false;
 		}
 		
 		if ($this->switch) {

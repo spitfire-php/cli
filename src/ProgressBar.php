@@ -63,6 +63,8 @@ class ProgressBar
 	
 	/**
 	 * Instances a new progress bar.
+	 * 
+	 * @param string $msg
 	 */
 	public function __construct($msg) {
 		$this->stream = new Stream();
