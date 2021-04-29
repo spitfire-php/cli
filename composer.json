@@ -15,6 +15,12 @@
 			"./vendor/bin/phpstan analyse ./src --level 7"
 		]
 	},
+	
+	"autoload": {
+		"psr-4": {
+			"spitfire\\cli\\" : "./src/"
+		}
+	},
     "require": {
 		"ext-posix" : "*",
         "spitfire/collection": "0.1"
