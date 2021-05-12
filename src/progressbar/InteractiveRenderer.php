@@ -1,7 +1,7 @@
 <?php namespace spitfire\cli\progressbar;
 
-use spitfire\core\Collection;
 use spitfire\cli\Stream;
+use spitfire\cli\support\Console;
 
 /* 
  * The MIT License
@@ -72,14 +72,33 @@ class InteractiveRenderer
 
 		$this->lastredraw = time();
 		$this->stream->rewind();
+		
+		$console_width = Console::width();
+		$decoration = strlen('[WAIT]  []');
 
 		if ($progress < 0 || $progress > 1) {
 			$this->stream->out(sprintf('[WAIT] %s [%s]', $this->message, 'Invalid value ' . $progress));
 		}
-		else {
-			$width = (int)exec('tput cols') - strlen($this->message) - 10;
+		
+		/**
+		 * If the console is wide enough to actually print anything of value. We will do that.
+		 * 
+		 * Otherwise, the system may cause issues, rendering garbage and flooding the user's screen
+		 * with nonsense.
+		 */
+		elseif($console_width > strlen($this->message) + $decoration) {
+			$width = Console::width() - strlen($this->message) - $decoration;
 			$drawn = (int)($progress * $width);
 			$this->stream->out(sprintf('[WAIT] %s [%s%s]', $this->message, str_repeat('#', $drawn), str_repeat(' ', $width - $drawn)));
+		}
+		
+		/**
+		 * If the console happens to be too narrow to fit our output, we will revert to printing
+		 * a message as small as possible sothe user knows that the application is working in the
+		 * background.
+		 */
+		else {
+			$this->stream->out(sprintf('[WAIT] %s', ['/', '-', '\\', '|'][time() % 4]));
 		}
 	}
 }
