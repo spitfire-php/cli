@@ -1,5 +1,8 @@
 <?php namespace spitfire\cli\arguments\consumer;
 
+use \spitfire\cli\arguments\ArgumentBuffer;
+use \spitfire\cli\arguments\CLIParameters;
+
 /* 
  * The MIT License
  *
@@ -24,10 +27,11 @@
  * THE SOFTWARE.
  */
 
-class STDINExtractor implements ConsumerInterface
+class STDINConsumer implements ConsumerInterface
 {
 	
-	public function consume($argument) {
+	public function consume(ArgumentBuffer $argument, CLIParameters $into) 
+	{
 		if ($argument === '-') {
 			/*
 			 * This method uses stream select to prevent the arguments from being
