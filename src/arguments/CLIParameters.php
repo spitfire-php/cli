@@ -37,34 +37,40 @@ class CLIParameters
 	
 	/**
 	 * 
-	 * @param array<string,string> $params
+	 * @var bool
 	 */
-	public function __construct(array $params) 
-	{
+	private bool $acceptsOptions = true;
+	
+	public function __construct($params) {
 		$this->params = $params;
 	}
 	
-	public function redirect(string $from, string $to) : void
+	public function get($name) 
 	{
-		
-		if (isset($this->params[$from]) && !isset($this->params[$to])) {
-			$this->params[$to] = $this->params[$from];
-			unset($this->params[$from]);
-		}
-		elseif (isset($this->params[$from]) && !isset($this->params[$to])) {
-			throw new Exception('Redirection collission', 1805291301);
-		}
+		return isset($this->params[$name])? $this->params[$name] : false;
 	}
 	
-	public function get(string $name) :? string
+	public function set(string $name, $value) : CLIParameters
 	{
-		return isset($this->params[$name])? $this->params[$name] : null;
+		$this->params[$name] = $value;
+		return $this;
+	}
+	
+	public function increment(string $name) : CLIParameters
+	{
+		$this->params[$name] = ((int) $this->params[$name]) + 1;
+		return $this;
 	}
 	
 	
 	public function defined(string $name) : bool
 	{
 		return array_key_exists($name, $this->params);
+	}
+	
+	public function acceptsOptions() : bool
+	{
+		return $this->acceptsOptions;
 	}
 	
 }

@@ -1,4 +1,7 @@
-<?php namespace spitfire\cli\arguments\extractor;
+<?php namespace spitfire\cli\arguments\consumer;
+
+use \spitfire\cli\arguments\ArgumentBuffer;
+use \spitfire\cli\arguments\CLIParameters;
 
 /* 
  * The MIT License
@@ -24,17 +27,15 @@
  * THE SOFTWARE.
  */
 
-class LongParamExtractor implements ExtractorInterface
+class EndOfOptionsConsumer implements ConsumerInterface
 {
 	
-	public function extract($argument) {
-		
-		if (substr($argument, 0, 2) === '--') { 
-			$pieces = explode('=', $argument, 2);
-			$name   = substr(array_shift($pieces), 2);
-			$value  = array_shift($pieces);
-			
-			return [$name => $value];
+	public function consume(ArgumentBuffer $argument, CLIParameters $into) 
+	{
+		if ($argument->peek() === '--') { 
+			$argument->forward();
+			$into->setAcceptsOptions(false);
+			return true;
 		}
 		
 		return false;

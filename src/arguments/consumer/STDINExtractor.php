@@ -1,4 +1,4 @@
-<?php namespace spitfire\cli\arguments\extractor;
+<?php namespace spitfire\cli\arguments\consumer;
 
 /* 
  * The MIT License
@@ -24,30 +24,27 @@
  * THE SOFTWARE.
  */
 
-class ShortParamExtractor implements ExtractorInterface
+class STDINExtractor implements ConsumerInterface
 {
 	
-	public function extract($argument) 
-	{
-		if ($argument[0] != '-' ) {
-			return false;
+	public function consume($argument) {
+		if ($argument === '-') {
+			/*
+			 * This method uses stream select to prevent the arguments from being
+			 * blocking.
+			 */
+			$read   = [STDIN];
+			$write  = [];
+			$except = [];
+			if (stream_select($read, $write, $except, 0)) {
+				return file_get_contents('php://stdin');
+			}
+			else {
+				return '';
+			}
 		}
 		
-		$pieces = explode('=', $argument, 2);
-		$name   = str_split(substr(array_shift($pieces), 1));
-		$value  = array_shift($pieces);
-		$parameters = [];
-		
-		if ($value) {
-			$first = array_pop($name);
-			$parameters[$first] = $value;
-		}
-
-		foreach ($name as $flag) { 
-			$parameters[$flag] = isset($parameters[$flag])? $parameters[$flag] + 1 : 1; 
-		}
-		
-		return $parameters;
+		return false;
 	}
 
 }

@@ -1,9 +1,12 @@
-<?php namespace spitfire\cli\arguments\extractor;
+<?php namespace spitfire\cli\arguments\consumer;
+
+use \spitfire\cli\arguments\ArgumentBuffer;
+use \spitfire\cli\arguments\CLIParameters;
 
 /* 
  * The MIT License
  *
- * Copyright 2018 César de la Cal Bretschneider <cesar@magic3w.com>.
+ * Copyright 2021 César de la Cal Bretschneider <cesar@magic3w.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,31 +27,23 @@
  * THE SOFTWARE.
  */
 
-class StopCommandExtractor implements ExtractorInterface
+/**
+ * The operand consumer extracts operands from the arguments list. Since this
+ * has a very low priority compared to Option consumers (it will be the last
+ * consumer), it will just feed all the items from the Buffer diretly into the
+ * Parameters object.
+ */
+class OperandConsumer implements ConsumerInterface
 {
 	
-	/**
-	 * @var bool
-	 */
-	private $switch = false;
-	
-	/**
-	 * 
-	 * @return mixed[]|bool|string
-	 */
-	public function extract(string $argument) 
+	public function consume(ArgumentBuffer $argument, CLIParameters $into) 
 	{
-		if ($argument === '--') { 
-			$this->switch = true; 
-			return false;
-		}
-		
-		if ($this->switch) {
-			return $argument;
-		}
-		else {
-			return false;
-		}
+		/**
+		 * The operand consumer is greedy. It will take anything it receives and 
+		 * just place it inside the operands list.
+		 */
+		$into->putOperand($argument->next());
+		return true;
 	}
 
 }

@@ -1,10 +1,9 @@
 <?php namespace spitfire\cli\arguments;
 
-use spitfire\cli\arguments\extractor\ExtractorInterface;
-use spitfire\cli\arguments\extractor\LongParamExtractor;
-use spitfire\cli\arguments\extractor\ShortParamExtractor;
-use spitfire\cli\arguments\extractor\STDINExtractor;
-use spitfire\cli\arguments\extractor\StopCommandExtractor;
+use spitfire\cli\arguments\consumer\LongParamExtractor;
+use spitfire\cli\arguments\consumer\ShortParamExtractor;
+use spitfire\cli\arguments\consumer\STDINExtractor;
+use spitfire\cli\arguments\consumer\StopCommandExtractor;
 
 /* 
  * The MIT License
@@ -30,6 +29,14 @@ use spitfire\cli\arguments\extractor\StopCommandExtractor;
  * THE SOFTWARE.
  */
 
+/**
+ * This parser receives the output of a parameters() function from a director and 
+ * uses it to extract the user's options and arguments accordingly to the specification
+ * of the director.
+ * 
+ * The parser then will expose a read() method that receives the argv and generates
+ * an array with configuration according to the spec.
+ */
 class Parser
 {
 	
@@ -39,13 +46,39 @@ class Parser
 	 */
 	private $extractors;
 	
-	public function __construct() {
-		$this->extractors = [
-			new StopCommandExtractor(),
-			new LongParamExtractor(),
-			new STDINExtractor(),
-			new ShortParamExtractor()
-		];
+	/**
+	 * Create a new argument parser for the command. To instance this we need an array
+	 * containing the specification explaining how options and arguments are parsed.
+	 * 
+	 * Each of the keys can be formatted like:
+	 * 
+	 * 1. A single dash followed by a single character (like -v)
+	 * 2. Two dashes followed by an arbitrary number of characters (like --working-dir)
+	 * 
+	 * Each of the values of the spec can contain the following
+	 * 
+	 * 1. A string (this is a redirection / alias to another argument - something like -v and --verbose)
+	 * 2. An array with the following keys
+	 *  - `required` (whether the application should fail if the argument is not available)
+	 *  - `type` (is an enum of bool, number and string - performs verification, bools are assumed to be flags)
+	 *  - `multiple` (optional - allows the user to use this multiple times, if true the value will always be an array)
+	 *  - `description` (explains what the argument is good for)
+	 * 
+	 * The system will automatically extract operands. Operands are all strings that satisfy one of the following
+	 * conditions:
+	 * 
+	 * 1. They appear after a double-dash (--) operator
+	 * 2. They are not immediately preceeded by a non-boolean operand and do not start with a hyphen
+	 * 
+	 * @param mixed[] $spec
+	 * @see https://phabricator.magic3w.com/source/spitfire/browse/master/mvc/Director.php For a sample specification
+	 */
+	public function __construct(array $spec) 
+	{
+		/**
+		 * @todo Implement
+		 * @todo Move the keys of the array into the specs, so the consumers can properly consume them
+		 */
 	}
 	
 	/**
@@ -53,38 +86,11 @@ class Parser
 	 * @param string[] $argv
 	 * @return CLIArguments
 	 */
-	public function read($argv) {
-		
-		$script     = array_shift($argv);
-		$parameters = [];
-		$arguments  = [];
-		
-		
-		foreach ($argv as $arg) {
-			foreach ($this->extractors as $extractor) {
-				
-				$r = $extractor->extract($arg);
-				
-				if ($r === false) {
-					//Do nothing, the extractor can't handle this data
-				}
-				
-				elseif (is_array($r)) {
-					$parameters = array_merge($parameters, $r);
-					continue 2;
-				}
-				
-				elseif (is_string($r)) {
-					$arguments[] = $r;
-					continue 2;
-				}
-			}
-				
-			$arguments[] = $arg;
-			
-		}
-		
-		return new CLIArguments($script, $arguments, $parameters);
+	public function read($argv) 
+	{	
+		/**
+		 * @todo Implement
+		 */
 	}
 	
 }

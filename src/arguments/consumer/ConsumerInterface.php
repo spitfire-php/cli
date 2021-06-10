@@ -1,4 +1,7 @@
-<?php namespace spitfire\cli\arguments\extractor;
+<?php namespace spitfire\cli\arguments\consumer;
+
+use \spitfire\cli\arguments\ArgumentBuffer;
+use \spitfire\cli\arguments\CLIParameters;
 
 /* 
  * The MIT License
@@ -24,16 +27,17 @@
  * THE SOFTWARE.
  */
 
-interface ExtractorInterface
+interface ConsumerInterface
 {
 	
 	/**
 	 * 
-	 * @param string $argument
-	 * @return mixed[]|bool|string Returns an array with the extracted data, false 
-	 *                             to indicate this extractor could not process the
-	 *                             data and a string if the argument is a argument.
+	 * @param ArgumentBuffer $argument
+	 * @param CLIParameters $into
+	 * 
+	 * @return bool Returns true if the consumer was able to consume, and false if it
+	 *              wasn't. This allows the consumer to stop.
 	 */
-	public function extract(string $argument);
+	public function consume(ArgumentBuffer $argument, CLIParameters $into);
 	
 }
