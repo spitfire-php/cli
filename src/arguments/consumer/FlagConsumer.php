@@ -92,7 +92,7 @@ class FlagConsumer implements ConsumerInterface
 		 * same argument twice, the application will just return true.
 		 */
 		else {
-			$into->set($key, true);
+			$into->setFlag($key, 1);
 		}
 		
 		return true;

@@ -31,46 +31,120 @@ class CLIParameters
 	
 	/**
 	 * 
-	 * @var array<string,string>
+	 * @var array<string,string[]>
 	 */
-	private $params;
+	private $options = [];
 	
 	/**
 	 * 
+	 * @var array<string, int>
+	 */
+	private $flags = [];
+	
+	/**
+	 * Operands are the unnamed parameters an application usually receives. This is common in applications
+	 * like `cp`, where the first and second operand are the source and target of a copy.
+	 * 
+	 * @var string[]
+	 */
+	private $operands = [];
+	
+	/**
+	 * The console arguments usually have one quirk. If they receive an empty option key (--), they will
+	 * stop parsing options and assume that everything after this are operands. Since we have several uncorrelated
+	 * consumers, having this here allows the consumer that detects this scenario set this flag so we can handle
+	 * the behavior accordingly.
+	 * 
 	 * @var bool
 	 */
-	private bool $acceptsOptions = true;
+	private $acceptsOptions = true;
 	
-	public function __construct($params) {
-		$this->params = $params;
+	/**
+	 * 
+	 * @return string[]|null
+	 */
+	public function get(string $name) :? array
+	{
+		return isset($this->options[$name])? $this->options[$name] : null;
 	}
 	
-	public function get($name) 
+	/**
+	 * 
+	 * @return string|null
+	 */
+	public function single(string $name) :? string
 	{
-		return isset($this->params[$name])? $this->params[$name] : false;
+		/**
+		 * If there is nothing defined for the key, we return null.
+		 */
+		if (!isset($this->options[$name])) {
+			return null;
+		}
+		
+		return reset($this->options[$name])?: null;
 	}
 	
-	public function set(string $name, $value) : CLIParameters
+	/**
+	 * @param string $name
+	 * @param string[] $value
+	 */
+	public function set(string $name, array $value) : CLIParameters
 	{
-		$this->params[$name] = $value;
+		$this->options[$name] = $value;
+		return $this;
+	}
+	
+	public function put(string $name, string $value) : CLIParameters
+	{
+		/**
+		 * If the option has no 
+		 */
+		if (!$this->options[$name]) {
+			$this->options[$name] = [];
+		}
+		
+		$this->options[$name][] = $value;
+		return $this;
+	}
+	
+	public function getFlag(string $name) :? int
+	{
+		return $this->flags[$name]?? null;
+	}
+	
+	public function setFlag(string $name, int $value) : CLIParameters
+	{
+		$this->flags[$name] = $value;
 		return $this;
 	}
 	
 	public function increment(string $name) : CLIParameters
 	{
-		$this->params[$name] = ((int) $this->params[$name]) + 1;
+		$this->flags[$name] = $this->flags[$name] + 1;
 		return $this;
 	}
 	
 	
 	public function defined(string $name) : bool
 	{
-		return array_key_exists($name, $this->params);
+		return array_key_exists($name, $this->options);
 	}
 	
 	public function acceptsOptions() : bool
 	{
 		return $this->acceptsOptions;
+	}
+	
+	public function setAcceptsOptions(bool $set) : CLIParameters
+	{
+		$this->acceptsOptions = $set;
+		return $this;
+	}
+	
+	public function putOperand(string $operand): CLIParameters
+	{
+		$this->operands[] = $operand;
+		return $this;
 	}
 	
 }
