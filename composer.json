@@ -12,7 +12,8 @@
 	
 	"scripts": {
 		"test": [
-			"./vendor/bin/phpstan analyse ./src --level 7"
+			"./vendor/bin/phpstan analyse ./src --level 7",
+			"./vendor/bin/phpcs ./src"
 		]
 	},
 	
@@ -26,6 +27,8 @@
         "spitfire/collection": "^0.1"
     },
     "require-dev": {
-        "phpstan/phpstan": "^0.12.82"
+        "phpstan/phpstan": "^0.12.82",
+        "squizlabs/php_codesniffer": "^3.6",
+        "phpunit/phpunit": "^9.5"
     }
 }
