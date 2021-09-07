@@ -23,7 +23,7 @@
 	},
     "require": {
 		"ext-posix" : "*",
-        "spitfire/collection": "0.1"
+        "spitfire/collection": "^0.1"
     },
     "require-dev": {
         "phpstan/phpstan": "^0.12.82"
