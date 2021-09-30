@@ -99,7 +99,7 @@ class CLIParameters
 		/**
 		 * If the option has no 
 		 */
-		if (!$this->options[$name]) {
+		if (!array_key_exists($name, $this->options)) {
 			$this->options[$name] = [];
 		}
 		
@@ -120,7 +120,7 @@ class CLIParameters
 	
 	public function increment(string $name) : CLIParameters
 	{
-		$this->flags[$name] = $this->flags[$name] + 1;
+		$this->flags[$name] = ($this->flags[$name]?? 0) + 1;
 		return $this;
 	}
 	
@@ -145,6 +145,11 @@ class CLIParameters
 	{
 		$this->operands[] = $operand;
 		return $this;
+	}
+	
+	public function getOperands(): array
+	{
+		return $this->operands;
 	}
 	
 }

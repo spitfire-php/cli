@@ -22,6 +22,7 @@
 use PHPUnit\Framework\TestCase;
 use spitfire\cli\arguments\ArgumentBuffer;
 use spitfire\cli\arguments\CLIParameters;
+use spitfire\cli\arguments\consumer\FlagConsumer;
 
 class FlagConsumerTest extends TestCase
 {
@@ -37,10 +38,10 @@ class FlagConsumerTest extends TestCase
 		$buffer = new ArgumentBuffer(['-v', '-v']);
 		$params = new CLIParameters();
 		
-		$consumer = new \spitfire\cli\consumer\FlagConsumer($schema);
-		$consumer->consume($buffer, $params);
+		$consumer = new FlagConsumer($schema);
+		while ($consumer->consume($buffer, $params));
 		
-		$this->assertEquals(2, $params->get('v'));
+		$this->assertEquals(2, $params->getFlag('-v'));
 		
 	}
 }

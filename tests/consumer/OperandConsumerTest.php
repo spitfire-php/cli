@@ -22,43 +22,26 @@
 use PHPUnit\Framework\TestCase;
 use spitfire\cli\arguments\ArgumentBuffer;
 use spitfire\cli\arguments\CLIParameters;
+use spitfire\cli\arguments\consumer\OperandConsumer;
 
 class OperandConsumerTest extends TestCase
 {
 	
-	public function testConsume()
+	
+	public function testConsumeMultiple()
 	{
 		$schema = [
-			'key' => '--name',
-			'description' => 'Sets the name of the script',
+			'key' => '-u',
+			'description' => 'Sets the username',
 			'multiple' => true
 		];
 		
-		$buffer = new ArgumentBuffer(['--name', 'test', '--name', 'more']);
+		$consumer = new OperandConsumer($schema);
+		$buffer = new ArgumentBuffer(['-u', 'root', 'system']);
 		$params = new CLIParameters();
 		
-		$consumer = new \spitfire\cli\consumer\OperandConsumer($schema);
-		$consumer->consume($buffer, $params);
+		while($consumer->consume($buffer, $params));
 		
-		$this->assertEquals(['name', 'more'], $params->get('--name'));
-		
-	}
-	
-	public function testConsumeSingle()
-	{
-		$schema = [
-			'key' => '--name',
-			'description' => 'Sets the name of the script',
-			'multiple' => false
-		];
-		
-		$buffer = new ArgumentBuffer(['--name', 'test', '--name', 'more']);
-		$params = new CLIParameters();
-		
-		$consumer = new \spitfire\cli\consumer\OperandConsumer($schema);
-		$consumer->consume($buffer, $params);
-		
-		$this->assertEquals('more', $params->get('--name'));
-		
+		$this->assertEquals(['-u', 'root', 'system'], $params->getOperands());
 	}
 }
