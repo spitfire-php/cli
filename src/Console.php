@@ -93,7 +93,8 @@ class Console
 	 * @param string $msg The message to print.
 	 * @return Console
 	 */
-	public function info($msg) {
+	public function info($msg)
+	{
 		$this->current = $this->stdout;
 		$out = str_replace(PHP_EOL, PHP_EOL . '       ', trim($msg));
 		
@@ -114,7 +115,8 @@ class Console
 	 * @param string $msg The message to print.
 	 * @return Console
 	 */
-	public function success($msg) {
+	public function success($msg)
+	{
 		$this->current = $this->stdout;
 		$out = str_replace(PHP_EOL, PHP_EOL . '       ', trim($msg));
 		
@@ -144,7 +146,8 @@ class Console
 	 * 
 	 * @return Stream
 	 */
-	public function stdout() {
+	public function stdout()
+	{
 		return $this->stdout;
 	}
 	
@@ -152,7 +155,8 @@ class Console
 	 * 
 	 * @return Stream
 	 */
-	public function stderr() {
+	public function stderr()
+	{
 		return $this->stderr;
 	}
 	
@@ -160,7 +164,8 @@ class Console
 	 * 
 	 * @return Console
 	 */
-	public function rewind() {
+	public function rewind()
+	{
 		$this->current->rewind();
 		return $this;
 	}
@@ -196,5 +201,4 @@ class Console
 		$this->current->line();
 		return $this;
 	}
-	
 }

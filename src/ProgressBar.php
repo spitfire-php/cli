@@ -66,7 +66,8 @@ class ProgressBar
 	 * 
 	 * @param string $msg
 	 */
-	public function __construct($msg) {
+	public function __construct($msg)
+	{
 		$this->stream = new Stream();
 		
 		$this->renderer = $this->stream->isInteractive()? 
@@ -82,7 +83,8 @@ class ProgressBar
 	 * @param float $progress A percent value between 0 and 1
 	 * @return ProgressBar
 	 */
-	public function progress($progress) {
+	public function progress($progress)
+	{
 		$this->renderer->render($progress);
 		return $this;
 	}
@@ -94,7 +96,8 @@ class ProgressBar
 	 * 
 	 * @return ProgressBar
 	 */
-	public function line() {
+	public function line()
+	{
 		$this->stream->line();
 		return $this;
 	}

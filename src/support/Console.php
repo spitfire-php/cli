@@ -7,7 +7,7 @@
 class Console
 {
 	
-	public static function width()
+	public static function width() : int
 	{
 		return (int)exec('tput cols');
 	}

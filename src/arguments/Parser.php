@@ -1,5 +1,6 @@
 <?php namespace spitfire\cli\arguments;
 
+use spitfire\cli\arguments\consumer\ConsumerInterface;
 use spitfire\cli\arguments\consumer\LongParamExtractor;
 use spitfire\cli\arguments\consumer\ShortParamExtractor;
 use spitfire\cli\arguments\consumer\STDINExtractor;
@@ -41,12 +42,6 @@ class Parser
 {
 	
 	/**
-	 * 
-	 * @var ExtractorInterface[]
-	 */
-	private $extractors;
-	
-	/**
 	 * Create a new argument parser for the command. To instance this we need an array
 	 * containing the specification explaining how options and arguments are parsed.
 	 * 
@@ -71,26 +66,21 @@ class Parser
 	 * 2. They are not immediately preceeded by a non-boolean operand and do not start with a hyphen
 	 * 
 	 * @param mixed[] $spec
+	 * @param string[] $argv
+	 * @return CLIParameters
 	 * @see https://phabricator.magic3w.com/source/spitfire/browse/master/mvc/Director.php For a sample specification
 	 */
-	public function __construct(array $spec) 
-	{
+	public function read(array $spec, array $argv) 
+	{	
+		$parsed = new CLIParameters();
 		/**
 		 * @todo Implement
 		 * @todo Move the keys of the array into the specs, so the consumers can properly consume them
 		 */
-	}
-	
-	/**
-	 * 
-	 * @param string[] $argv
-	 * @return CLIArguments
-	 */
-	public function read($argv) 
-	{	
 		/**
 		 * @todo Implement
 		 */
+		
+		 return $parsed;
 	}
-	
 }

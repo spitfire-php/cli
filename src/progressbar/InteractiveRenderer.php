@@ -54,7 +54,7 @@ class InteractiveRenderer
 	 */
 	private $lastredraw;
 	
-	public function __construct (string $message, Stream $stream)
+	public function __construct(string $message, Stream $stream)
 	{
 		$this->message = $message;
 		$this->stream = $stream;
@@ -68,7 +68,9 @@ class InteractiveRenderer
 	public function render(float $progress) : void
 	{
 			
-		if (time() === $this->lastredraw) { return; }
+		if (time() === $this->lastredraw) {
+			return; 
+		}
 
 		$this->lastredraw = time();
 		$this->stream->rewind();
@@ -86,10 +88,12 @@ class InteractiveRenderer
 		 * Otherwise, the system may cause issues, rendering garbage and flooding the user's screen
 		 * with nonsense.
 		 */
-		elseif($console_width > strlen($this->message) + $decoration) {
+		elseif ($console_width > strlen($this->message) + $decoration) {
 			$width = Console::width() - strlen($this->message) - $decoration;
 			$drawn = (int)($progress * $width);
-			$this->stream->out(sprintf('[WAIT] %s [%s%s]', $this->message, str_repeat('#', $drawn), str_repeat(' ', $width - $drawn)));
+			$gfx   = str_repeat('#', $drawn) . str_repeat(' ', $width - $drawn);
+			$msg   = sprintf('[WAIT] %s [%s]', $this->message, $gfx);
+			$this->stream->out($msg);
 		}
 		
 		/**

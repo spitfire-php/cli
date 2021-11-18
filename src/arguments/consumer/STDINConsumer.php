@@ -30,8 +30,10 @@ use \spitfire\cli\arguments\CLIParameters;
 class STDINConsumer implements ConsumerInterface
 {
 	
-	public function consume(ArgumentBuffer $argument, CLIParameters $into) 
+	public function consume(ArgumentBuffer $buffer, CLIParameters $into) 
 	{
+		$argument = $buffer->peek();
+		
 		if ($argument === '-') {
 			/*
 			 * This method uses stream select to prevent the arguments from being
@@ -40,15 +42,13 @@ class STDINConsumer implements ConsumerInterface
 			$read   = [STDIN];
 			$write  = [];
 			$except = [];
+			
 			if (stream_select($read, $write, $except, 0)) {
-				return file_get_contents('php://stdin');
-			}
-			else {
-				return '';
+				$payload = file_get_contents('php://stdin');
+				$into->putOperand($payload === false? null : $payload);
 			}
 		}
 		
 		return false;
 	}
-
 }

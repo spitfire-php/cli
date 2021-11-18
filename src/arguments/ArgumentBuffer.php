@@ -54,13 +54,13 @@ class ArgumentBuffer
 	 * next item (just like the next function in PHP does), but this is not the
 	 * case, the buffer will return the current item and forward the pointer.
 	 * 
-	 * @return string
+	 * @return string|null
 	 */
-	public function read() : string
+	public function read() :? string
 	{
 		$_ret = current($this->items);
 		next($this->items);
-		return $_ret;
+		return $_ret === false? null : $_ret;
 	}
 	
 	
@@ -79,11 +79,12 @@ class ArgumentBuffer
 	/**
 	 * Returns the current item from the buffer, this does not advance the array pointer.
 	 * 
-	 * @return string
+	 * @return string|null
 	 */
-	public function peek() : string
+	public function peek() :? string
 	{
-		return current($this->items);
+		$_ret = current($this->items);
+		return $_ret === false? null : $_ret;
 	}
 	
 	/**
@@ -105,6 +106,4 @@ class ArgumentBuffer
 	{
 		return $this->items;
 	}
-	
 }
- 

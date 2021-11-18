@@ -19,15 +19,9 @@ interface FilterInterface
 	/**
 	 * 
 	 * @param mixed[] $spec
-	 * @see https://phabricator.magic3w.com/source/spitfire/browse/master/mvc/Director.php For a sample specification
-	 */
-	public function __construct(array $spec);
-	
-	/**
-	 * 
 	 * @param string[] $input
 	 * @return string[]
+	 * @see https://phabricator.magic3w.com/source/spitfire/browse/master/mvc/Director.php For a sample specification
 	 */
-	public function filter(array $input) : array;
-	
+	public function filter(array $spec, array $input) : array;
 }

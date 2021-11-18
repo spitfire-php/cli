@@ -3,22 +3,13 @@
 class EqualsFilter implements FilterInterface
 {
 	
-	/**
-	 * 
-	 * @param mixed[] $spec
-	 * @see https://phabricator.magic3w.com/source/spitfire/browse/master/mvc/Director.php For a sample specification
-	 */
-	public function __construct(array $spec)
-	{
-		
-	}
 	
 	/**
 	 * 
 	 * @param string[] $input
 	 * @return string[]
 	 */
-	public function filter(array $input) : array
+	public function filter(array $spec, array $input) : array
 	{
 		
 		$_ret = [];
@@ -58,12 +49,9 @@ class EqualsFilter implements FilterInterface
 			 */
 			if (preg_match('/\-\-?[A-Za-z0-9_\-]+\=/', $piece, $matches)) {
 				$_ret = array_merge($_ret, explode('=', $piece, 2));
-				
 			}
-			
 		}
 		
 		return $_ret;
 	}
-	
 }

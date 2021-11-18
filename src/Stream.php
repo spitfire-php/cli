@@ -46,7 +46,8 @@ class Stream
 	 * @param string $msg
 	 * @return Stream
 	 */
-	public function out($msg) {
+	public function out($msg)
+	{
 		fwrite($this->stream, $msg);
 		return $this;
 	}

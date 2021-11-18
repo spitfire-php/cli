@@ -86,7 +86,7 @@ class CLIParameters
 	
 	/**
 	 * @param string $name
-	 * @param string[] $value
+	 * @param (string|null)[] $value
 	 */
 	public function set(string $name, array $value) : CLIParameters
 	{
@@ -147,9 +147,12 @@ class CLIParameters
 		return $this;
 	}
 	
+	/**
+	 * 
+	 * @return string[]
+	 */
 	public function getOperands(): array
 	{
 		return $this->operands;
 	}
-	
 }

@@ -39,5 +39,4 @@ interface ConsumerInterface
 	 *              wasn't. This allows the consumer to stop.
 	 */
 	public function consume(ArgumentBuffer $argument, CLIParameters $into);
-	
 }

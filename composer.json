@@ -13,7 +13,7 @@
 	"scripts": {
 		"test": [
 			"./vendor/bin/phpstan analyse ./src --level 7",
-			"./vendor/bin/phpcs ./src"
+			"./vendor/bin/phpcs ./src -s"
 		]
 	},
 	

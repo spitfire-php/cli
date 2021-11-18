@@ -65,7 +65,7 @@ class PipeRenderer
 	private $cached = 0;
 	
 	
-	public function __construct (string $message, Stream $stream)
+	public function __construct(string $message, Stream $stream)
 	{
 		$this->message = $message;
 		$this->stream = $stream;
@@ -79,22 +79,18 @@ class PipeRenderer
 		/**
 		 * Pipes are not a buffer. So they 
 		 */
-		if ($percent <= $this->cached) 
-		{ 
+		if ($percent <= $this->cached) { 
 			return; 
 		}
 		
-		if (!$this->renderedMessage) 
-		{
+		if (!$this->renderedMessage) {
 			$this->stream->out(sprintf('[WAIT] %s ', $this->message));
 			$this->renderedMessage = true;
 		}
 		
-		if ($progress < 0 || $progress > 1) 
-		{
+		if ($progress < 0 || $progress > 1) {
 			#Do nothing. This cannot be rendered.
-		}
-		else {
+		} else {
 			$this->stream->out(str_repeat('.', $percent - $this->cached));
 			$this->cached = $percent;
 		}

@@ -45,5 +45,4 @@ class OperandConsumer implements ConsumerInterface
 		$into->putOperand($argument->read());
 		return true;
 	}
-
 }

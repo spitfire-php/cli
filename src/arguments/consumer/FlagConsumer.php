@@ -1,6 +1,5 @@
 <?php namespace spitfire\cli\arguments\consumer;
 
-
 use \spitfire\cli\arguments\ArgumentBuffer;
 use \spitfire\cli\arguments\CLIParameters;
 
@@ -63,7 +62,9 @@ class FlagConsumer implements ConsumerInterface
 		 * It's entirely possible, that the result has been locked by the StopOptionConsumer
 		 * which has to be respected by this one.
 		 */
-		if (!$into->acceptsOptions()) { return false; }
+		if (!$into->acceptsOptions()) {
+			return false; 
+		}
 		
 		/**
 		 * If the next entry starts with a hyphen (-), the consumer should continue,
@@ -72,7 +73,9 @@ class FlagConsumer implements ConsumerInterface
 		 * 
 		 * If the key is only one dash, we will also stop it right there, since it
 		 */
-		if ($key !== $this->schema['key']) { return false; }
+		if ($key !== $this->schema['key']) {
+			return false; 
+		}
 		
 		/**
 		 * Once we know that the result does accept more options, and that this is, indeed,
@@ -97,5 +100,4 @@ class FlagConsumer implements ConsumerInterface
 		
 		return true;
 	}
-
 }

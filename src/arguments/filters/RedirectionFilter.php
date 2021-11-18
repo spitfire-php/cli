@@ -29,8 +29,6 @@ use spitfire\collection\Collection;
 class RedirectionFilter implements FilterInterface
 {
 	
-	private $spec;
-	
 	/**
 	 * This filter will rewrite redirections to canonicalize them. If we established 
 	 * an argument redirection like -a => --append, the filter will replace it with 
@@ -41,29 +39,23 @@ class RedirectionFilter implements FilterInterface
 	 * the most canonical directly.
 	 * 
 	 * @param mixed[] $spec
-	 * @see https://phabricator.magic3w.com/source/spitfire/browse/master/mvc/Director.php For a sample specification
-	 */
-	public function __construct(array $spec)
-	{
-		$this->spec = (new Collection($spec))->filter(function ($e) {
-			return is_string($e);
-		});
-	}
-	
-	/**
-	 * 
 	 * @param string[] $input
 	 * @return string[]
+	 * @see https://phabricator.magic3w.com/source/spitfire/browse/master/mvc/Director.php For a sample specification
 	 */
-	public function filter(array $input) : array
+	public function filter(array $spec, array $input) : array
 	{
 		$_ret = [];
+		
+		$spec = (new Collection($spec))->filter(function ($e) {
+			return is_string($e);
+		});
 		
 		while ($string = array_shift($input)) {
 			/**
 			 * Walk over the redirections, looking for one that matches the input we received
 			 */
-			foreach ($this->spec as $key => $redirection) {
+			foreach ($spec as $key => $redirection) {
 				if ($string == $key) {
 					$_ret[] = $redirection;
 					
@@ -95,5 +87,4 @@ class RedirectionFilter implements FilterInterface
 		
 		return $_ret;
 	}
-	
 }
