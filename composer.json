@@ -13,7 +13,9 @@
 	"scripts": {
 		"test": [
 			"./vendor/bin/phpstan analyse ./src --level 7",
-			"./vendor/bin/phpcs ./src -s"
+			"./vendor/bin/phpcs ./src -s",
+			"./vendor/bin/phpcs ./tests -s",
+			"./vendor/bin/phpunit tests/"
 		]
 	},
 	

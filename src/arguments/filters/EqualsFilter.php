@@ -50,6 +50,9 @@ class EqualsFilter implements FilterInterface
 			if (preg_match('/\-\-?[A-Za-z0-9_\-]+\=/', $piece, $matches)) {
 				$_ret = array_merge($_ret, explode('=', $piece, 2));
 			}
+			else {
+				$_ret[] = $piece;
+			}
 		}
 		
 		return $_ret;

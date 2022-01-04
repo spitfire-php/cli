@@ -1,4 +1,4 @@
-<?php 
+<?php namespace spitfire\cli\tests\consumer;
 
 /* 
  * Copyright (C) 2021 César de la Cal Bretschneider <cesar@magic3w.com>.
@@ -39,10 +39,9 @@ class OptionConsumerTest extends TestCase
 		$params = new CLIParameters();
 		
 		$consumer = new OptionConsumer($schema);
-		while($consumer->consume($buffer, $params));
+		while ($consumer->consume($buffer, $params));
 		
 		$this->assertEquals(['test', 'more'], $params->get('--name'));
-		
 	}
 	
 	public function testConsumeSingle()
@@ -57,10 +56,9 @@ class OptionConsumerTest extends TestCase
 		$params = new CLIParameters();
 		
 		$consumer = new OptionConsumer($schema);
-		while($consumer->consume($buffer, $params));
+		while ($consumer->consume($buffer, $params));
 		
 		$this->assertEquals(['more'], $params->get('--name'));
-		
 	}
 	
 	public function testConsumeShort()
@@ -75,7 +73,7 @@ class OptionConsumerTest extends TestCase
 		$buffer = new ArgumentBuffer(['-u', 'root']);
 		$params = new CLIParameters();
 		
-		while($consumer->consume($buffer, $params));
+		while ($consumer->consume($buffer, $params));
 		
 		$this->assertEquals(['root'], $params->get('-u'));
 	}
@@ -93,7 +91,7 @@ class OptionConsumerTest extends TestCase
 		$buffer = new ArgumentBuffer(['-u', 'root', '-u', 'system']);
 		$params = new CLIParameters();
 		
-		while($consumer->consume($buffer, $params));
+		while ($consumer->consume($buffer, $params));
 		
 		$this->assertEquals(['root', 'system'], $params->get('-u'));
 	}

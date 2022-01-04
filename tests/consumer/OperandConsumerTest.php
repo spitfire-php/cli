@@ -1,4 +1,4 @@
-<?php 
+<?php namespace spitfire\cli\tests\consumer;
 
 /* 
  * Copyright (C) 2021 César de la Cal Bretschneider <cesar@magic3w.com>.
@@ -40,7 +40,7 @@ class OperandConsumerTest extends TestCase
 		$buffer = new ArgumentBuffer(['-u', 'root', 'system']);
 		$params = new CLIParameters();
 		
-		while($consumer->consume($buffer, $params));
+		while ($consumer->consume($buffer, $params));
 		
 		$this->assertEquals(['-u', 'root', 'system'], $params->getOperands());
 	}

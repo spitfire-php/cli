@@ -1,4 +1,4 @@
-<?php 
+<?php namespace spitfire\cli\tests\arguments;
 
 /* 
  * Copyright (C) 2021 César de la Cal Bretschneider <cesar@magic3w.com>.

@@ -1,10 +1,19 @@
 <?php namespace spitfire\cli\arguments;
 
 use spitfire\cli\arguments\consumer\ConsumerInterface;
+use spitfire\cli\arguments\consumer\EndOfOptionsConsumer;
+use spitfire\cli\arguments\consumer\FlagConsumer;
 use spitfire\cli\arguments\consumer\LongParamExtractor;
+use spitfire\cli\arguments\consumer\OperandConsumer;
+use spitfire\cli\arguments\consumer\OptionConsumer;
 use spitfire\cli\arguments\consumer\ShortParamExtractor;
+use spitfire\cli\arguments\consumer\STDINConsumer;
 use spitfire\cli\arguments\consumer\STDINExtractor;
 use spitfire\cli\arguments\consumer\StopCommandExtractor;
+use spitfire\cli\arguments\filters\EqualsFilter;
+use spitfire\cli\arguments\filters\FilterInterface;
+use spitfire\cli\arguments\filters\RedirectionFilter;
+use spitfire\collection\Collection;
 
 /* 
  * The MIT License
@@ -71,16 +80,79 @@ class Parser
 	 * @see https://phabricator.magic3w.com/source/spitfire/browse/master/mvc/Director.php For a sample specification
 	 */
 	public function read(array $spec, array $argv) 
-	{	
-		$parsed = new CLIParameters();
-		/**
-		 * @todo Implement
-		 * @todo Move the keys of the array into the specs, so the consumers can properly consume them
-		 */
-		/**
-		 * @todo Implement
-		 */
+	{
+		$filters = new Collection([
+			new EqualsFilter(),
+			new RedirectionFilter()
+		]);
 		
-		 return $parsed;
+		$consumers = new Collection();
+		
+		foreach ($spec as $key => $schema) {
+			/**
+			 * The spec can contain arrays for the consumers and strings
+			 * for the redirections. We do not care about the redirections here
+			 * so we can safely skip them.
+			 */
+			if (is_string($schema)) {
+				continue; 
+			}
+			
+			/**
+			 * Inject the key into the schema so the consumer knows what data it
+			 * is working with and where it should place the results.
+			 */
+			$schema['key'] = $schema['key']?? $key;
+			
+			/**
+			 * Create the consumers for the data we are expecting. Please note that
+			 * we make a distinction between bools and strings (and numbers) so we 
+			 * need to account for that.
+			 */
+			switch ($schema['type']?? 'string') {
+				case 'bool':
+					$consumers->push(new FlagConsumer($schema));
+					break;
+				case 'string':
+				case 'number':
+					$consumers->push(new OptionConsumer($schema));
+					break;
+			}
+		}
+		
+		/**
+		 * Push the standard consumers that are not related to the director specific options.
+		 * This allows our application to read operands and similar stuff.
+		 */
+		$consumers->push(new EndOfOptionsConsumer());
+		$consumers->push(new STDINConsumer());
+		$consumers->push(new OperandConsumer());
+		
+		/**
+		 * Filter the input we received. This provides us with normalized input and allows our 
+		 * application to read ooptions that contain equals signs or shorthand options.
+		 */
+		$input  = new ArgumentBuffer($filters->reduce(function (array $carry, FilterInterface $f) use ($spec) {
+			return $f->filter($spec, $carry);
+		}, $argv));
+		
+		/**
+		 * Prepare an output object that will receive all the data and hold state information on
+		 * the read data.
+		 */
+		$output = new CLIParameters();
+		
+		/**
+		 * Extract the data from the argument buffer.
+		 */
+		while (!$input->exhausted()) {
+			foreach ($consumers as $consumer) {
+				if ($consumer->consume($input, $output)) {
+					continue 2;
+				}
+			}
+		}
+		
+		 return $output;
 	}
 }

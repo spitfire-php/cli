@@ -1,4 +1,4 @@
-<?php namespace spitfire\cli\tests\consumer;
+<?php namespace spitfire\cli\tests\arguments;
 
 /* 
  * Copyright (C) 2021 César de la Cal Bretschneider <cesar@magic3w.com>.
@@ -20,27 +20,30 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use spitfire\cli\arguments\ArgumentBuffer;
-use spitfire\cli\arguments\CLIParameters;
-use spitfire\cli\arguments\consumer\FlagConsumer;
+use spitfire\cli\arguments\Parser;
 
-class FlagConsumerTest extends TestCase
+class ParserTest extends TestCase
 {
 	
 	public function testConsume()
 	{
-		$schema = [
-			'key' => '-v',
-			'description' => 'Sets the verbosity level',
-			'multiple' => true
+		
+		$spec = [
+			'-v' => '--verbose',
+			'--verbose' => [
+				'type' => 'bool',
+				'description' => 'Sets the verbosity'
+			],
+			'--user' => [
+				'type' => 'string',
+				'description' => 'Username'
+			]
 		];
 		
-		$buffer = new ArgumentBuffer(['-v', '-v']);
-		$params = new CLIParameters();
+		$parser = new Parser();
+		$result = $parser->read($spec, ['-v', '--user', 'root']);
 		
-		$consumer = new FlagConsumer($schema);
-		while ($consumer->consume($buffer, $params));
-		
-		$this->assertEquals(2, $params->getFlag('-v'));
+		$this->assertEquals(1, $result->getFlag('--verbose'));
+		$this->assertEquals(['root'], $result->get('--user'));
 	}
 }
