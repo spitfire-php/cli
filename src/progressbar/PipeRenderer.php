@@ -37,7 +37,7 @@ use spitfire\cli\Stream;
  */
 class PipeRenderer
 {
-
+	
 	/**
 	 * 
 	 * @var Stream

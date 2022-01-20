@@ -35,17 +35,17 @@ use spitfire\cli\support\Console;
  */
 class InteractiveRenderer
 {
-
+	
 	/**
 	 * @var Stream
 	 */
 	private $stream;
-
+	
 	/**
 	 * @var string
 	 */
 	private $message;
-
+	
 	/**
 	 * Contains the timestamp of the last redraw, this prevents the application
 	 * from being to aggressive updating the screen by providing a debounce logic.
@@ -67,17 +67,17 @@ class InteractiveRenderer
 	 */
 	public function render(float $progress) : void
 	{
-			
+		
 		if (time() === $this->lastredraw) {
 			return; 
 		}
-
+		
 		$this->lastredraw = time();
 		$this->stream->rewind();
 		
 		$console_width = Console::width();
 		$decoration = strlen('[WAIT]  []');
-
+		
 		if ($progress < 0 || $progress > 1) {
 			$this->stream->out(sprintf('[WAIT] %s [%s]', $this->message, 'Invalid value ' . $progress));
 		}
