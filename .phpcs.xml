@@ -16,6 +16,8 @@
 	  <properties>
 		 <property name="indent" value="4"/>
 		 <property name="tabIndent" value="true"/>
+		 <property name="exact" value="true"/>
+		 <property name="indentWhitespaceInScope" value="true"/>
 	  </properties>
 	</rule>
 </ruleset>

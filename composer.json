@@ -30,7 +30,15 @@
     },
     "require-dev": {
         "phpstan/phpstan": "^0.12.82",
-        "squizlabs/php_codesniffer": "^3.6",
+        "squizlabs/php_codesniffer": "dev-dev/scope-indent-blank-lines",
         "phpunit/phpunit": "^9.5"
-    }
+    },
+	
+	"repositories":
+    [
+            {
+                "type": "vcs",
+                "url": "https://github.com/Csardelacal/PHP_Codesniffer"
+            }
+    ]
 }

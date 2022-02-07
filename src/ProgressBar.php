@@ -69,10 +69,19 @@ class ProgressBar
 	public function __construct($msg)
 	{
 		$this->stream = new Stream();
+		$interactive = $this->stream->isInteractive();
 		
-		$this->renderer = $this->stream->isInteractive()? 
-			new InteractiveRenderer($msg, $this->stream) : 
-			new PipeRenderer($msg, $this->stream);
+		/**
+		 * If the stream we're outputting to is interactive (a TTY), we can
+		 * render the bar as a progress bar that changes. If the data is being
+		 * written to a logfile this would increase the size unnecessarily.
+		 */
+		if ($interactive) {
+			$this->renderer = new InteractiveRenderer($msg, $this->stream);
+		}
+		else {
+			$this->renderer = new PipeRenderer($msg, $this->stream);
+		}
 		
 		$this->renderer->render(0);
 	}

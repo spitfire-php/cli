@@ -153,6 +153,6 @@ class Parser
 			}
 		}
 		
-		 return $output;
+		return $output;
 	}
 }
